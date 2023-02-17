@@ -10,6 +10,7 @@ app.use(express.json());
 const uri = `mongodb+srv://${process.env.USER}:${process.env.PASSWORD}@cluster0.ckb7hbl.mongodb.net/?retryWrites=true&w=majority`;
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
 const productCollection = client.db('12-assignment').collection('allServices')
+const orders = client.db('12-assignment').collection('allOrders')
 
 async function run() {
     try {
@@ -23,6 +24,26 @@ async function run() {
             const response = await productCollection.find(query).toArray();
             console.log(response, 'respnse');
             res.send(response)
+        })
+        app.get('/orders', async (q, s) => {
+            let query = {}
+            if (q.query.email) {
+                query = {
+                    email: q.query.email,
+                }
+            }
+            console.log(query, 'query');
+            // const ordersData = orders.find()
+            const ordersData = await orders.find(query).toArray();
+            console.log(ordersData, 'ordersdata');
+            s.send(ordersData)
+        })
+        app.post('/orders', (q, s)=>{
+            const order = q.body;
+            orders.insertOne(order)
+                .then(res => {
+                    console.log(res, 'now res');
+                    s.send(res)})
         })
     }
     finally {
