@@ -16,6 +16,11 @@ async function run() {
     try {
         app.get('/products', async (req, res) => {
             let query = {};
+            if (req.query.email){
+                const email = req.query.email;
+                console.log(email, 'category2');
+                query = { email}
+            }
             if (req.query.category){
                 const category = req.query.category;
                 console.log(category, 'category2');
