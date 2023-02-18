@@ -43,7 +43,14 @@ async function run() {
             orders.insertOne(order)
                 .then(res => {
                     console.log(res, 'now res');
-                    s.send(res)})
+                    s.send(res)});
+        })
+        app.post('/product', (q, s)=>{
+            const product = q.body;
+            productCollection.insertOne(product)
+                .then(res => {
+                    console.log(res, 'now res');
+                    s.send(res)});
         })
     }
     finally {
