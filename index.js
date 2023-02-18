@@ -18,16 +18,13 @@ async function run() {
             let query = {};
             if (req.query.email){
                 const email = req.query.email;
-                console.log(email, 'category2');
                 query = { email}
             }
             if (req.query.category){
                 const category = req.query.category;
-                console.log(category, 'category2');
                 query = { category}
             }
             const response = await productCollection.find(query).toArray();
-            console.log(response, 'respnse');
             res.send(response)
         })
         app.get('/orders', async (q, s) => {
@@ -37,24 +34,20 @@ async function run() {
                     email: q.query.email,
                 }
             }
-            console.log(query, 'query');
             // const ordersData = orders.find()
             const ordersData = await orders.find(query).toArray();
-            console.log(ordersData, 'ordersdata');
             s.send(ordersData)
         })
         app.post('/orders', (q, s)=>{
             const order = q.body;
             orders.insertOne(order)
                 .then(res => {
-                    console.log(res, 'now res');
                     s.send(res)});
         })
         app.post('/product', (q, s)=>{
             const product = q.body;
             productCollection.insertOne(product)
                 .then(res => {
-                    console.log(res, 'now res');
                     s.send(res)})
         })
     }
@@ -69,5 +62,4 @@ app.get('/', (req, res) => {
 })
 
 app.listen(port, () => {
-    console.log(`12 assignment running on: ${port}`)
 })
